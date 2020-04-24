@@ -1,0 +1,72 @@
+﻿@page "/fetchworkingtask"
+
+@using BlazorApp1.Data
+@inject WorkingTaskService workingTaskService
+@inject EasyredmienWrapper er
+
+<h1>Working Tasks</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (workingTasks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Project code</th>
+                <th>Task Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var workingTask in workingTasks)
+            {
+                <tr>
+                    <td>@workingTask.ProjectCode</td>
+                    <td>@workingTask.TaskName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>firstname</th>
+                <th>lastname</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.firstname</td>
+                    <td>@user.lastname</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<WorkingTask> workingTasks;
+
+    private List<User> users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        workingTasks = await workingTaskService.GetWorkingTasksAsync();
+
+        users = await er.GetUsersAsync();
+    }
+}
